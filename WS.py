@@ -1,10 +1,18 @@
 from urllib.request import urlopen as uRequest
 from bs4 import BeautifulSoup as soup
 
+class Entertainment:
+
+    def __init__(self,name,year,id,link):
+        self.name = name
+        self.year = year
+        self.id = id
+        self.link = link
+
 #srh=input("Search:")
 #srh=srh.replace(" ","+")
-srh = "fast+and+furious"
-my_url = f"https://www.imdb.com/find?q={srh}&ref_=nv_sr_sm"
+srh = "gun"
+my_url = "https://www.imdb.com/find?q=assasin&s=tt&ttype=ft&ref_=fn_ft"
 
 uClient = uRequest(my_url)
 page_html = uClient.read()
@@ -21,16 +29,35 @@ for x in range(len(containers)):
 
 #info=results.table.tr.find("td",{"class":"result_text"})
 #print(info.text.strip().split()[1])
+#name
 name=[]
-data=[[]]
+links=[]
 other=[]
 info=results.table.findAll("tr")
 for x in range(len(info)):
     name.append(info[x].find("td",{"class":"result_text"}).a.text)
-    other.append(info[x].find("td",{"class":"result_text"}).text.strip())
+    other.append(info[x].find("td",{"class":"result_text"}).text.split())
+    links.append("https://www.imdb.com"+info[1].find("td",{"class":"result_text"}).a["href"])
 
-#print(name)
-print(other)
+#for link in links:
+    uClient = uRequest("https://www.imdb.com/title/tt1560954/?ref_=fn_ft_tt_1")
+    page_html_link = uClient.read()
+    uClient.close()
+
+    page_soup_link = soup(page_html_link, "html.parser")
+
+    containers_link = page_soup.findAll("div",{ "class":"TitleBlock__Container"})
+
+f_result=[]
+#for x in range(len(other)):
+#    f_result.append(Entertainment(name[x],year[x],"-----",links[x]))
+#    print(f"Name:{f_result[x].name} | Year:{f_result[x].year} | ID:{f_result[x].id}")
+
+#print(yearr)
+#print(yearn1)
+#print(yearn2)
+print(containers_link)
+
 #for i in range(len(data)):
 #    print(f"Name:{data[i][0]} | Year:{data[i][1]}")
 #.find("td",{"class":"result_text"})
