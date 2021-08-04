@@ -17,17 +17,23 @@ def del_updates(data):
 
 def send_message(data, msg):
     config['lock'].acquire()
-    requests.post(f"{config['url']}/sendMessage",{'chat_id':data["message"]["chat"]["id"], 'text':str(msg)})
-    config['lock'].release()
+    headers = {"Content-Type":"application/json"}
 
+    send_data = {"chat_id":data["message"]["chat"]["id"], "text":str(msg), "reply_markup":{"keyboard":[[{"text":"1"}],[{"text":"2"}]], "resize_keyboard":True, "one_time_keyboard":False},}
+    send_data=json.dumps(send_data,indent=1)
+    print(send_data)
+    requests.post(f"{config['url']}/sendMessage",send_data)
+    config['lock'].release()
+    
+# "reply_markup":{'keyboard':[[{"text":"1"}],[{"text":"2"}]], 'resize_keyboard':True, "one_time_keyboard":False}
 while True:
 
-    while True:
+    json_load=''
+    while 'result' not in json_load:
         try:
             json_load = json.loads(requests.get(f"{config['url']}/getUpdates").text)
-            break
         except Exception as exception:
-            json_load = {"result": []}
+            json_load = ''
             if 'Failed to establish a new connection' in str(exception):
                 print("Connection failed")
             else:
@@ -38,6 +44,7 @@ while True:
             Thread(target=del_updates, args=(data,)).start()
             msg=f'{data["message"]["text"]} from:BOT'
             print(f'{data["message"]["text"]} from:{data["message"]["chat"]["username"]}')
-            Thread(target=send_message, args=(data, msg)).start()
+            #Thread(target=send_message, args=(data, msg)).start()
+            send_message(data, msg)
         sleep(1)
 
