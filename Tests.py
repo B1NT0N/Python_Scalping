@@ -17,11 +17,48 @@ def del_updates(data):
 
 def send_message(data, msg):
     config['lock'].acquire()
-    headers = {"Content-Type":"application/json"}
 
-    send_data = {"chat_id":data["message"]["chat"]["id"], "text":str(msg), "reply_markup":{"keyboard":[[{"text":"1"}],[{"text":"2"}]], "resize_keyboard":True, "one_time_keyboard":False},}
-    send_data=json.dumps(send_data,indent=1)
-    print(send_data)
+
+    keyboard = {
+                "keyboard":[
+                            [
+                                {"text": " 🎬 Movies"}
+                            ],
+                            [
+                                {"text": " 📺 Series"}
+                            ],
+                            [
+                                {"text": " 🔙 Back"}
+                            ]
+                        ],
+                'resize_keyboard':True,
+                "one_time_keyboard":True
+                }
+    in_keyboard={
+        "inline_keyboard":[
+                            [
+                                {"text": " 🎬 Movies",
+                                "callback_data":"m"
+                                }
+                            ],
+                            [
+                                {"text": " 📺 Series",
+                                "callback_data":"s"
+                                }
+                            ]
+                        ],
+    }
+
+    in_keyboard = json.dumps(in_keyboard)
+    keyboard = json.dumps(keyboard)
+
+    send_data = {"chat_id":data["message"]["chat"]["id"], 
+                "text":str(msg),
+                "reply_markup":in_keyboard
+     
+    }
+
+    #print(send_data)
     requests.post(f"{config['url']}/sendMessage",send_data)
     config['lock'].release()
     
