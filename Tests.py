@@ -38,7 +38,8 @@ def send_message(data, msg):
         "inline_keyboard":[
                             [
                                 {"text": " 🎬 Movies",
-                                "callback_data":"m"
+                                "callback_data":"m",
+                                "url":"https://core.telegram.org/bots/api#inlinekeyboardmarkup"
                                 }
                             ],
                             [
