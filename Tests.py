@@ -34,12 +34,13 @@ def send_message(data, msg):
                 'resize_keyboard':True,
                 "one_time_keyboard":True
                 }
+
     in_keyboard={
         "inline_keyboard":[
                             [
                                 {"text": " 🎬 Movies",
                                 "callback_data":"m",
-                                "url":"https://core.telegram.org/bots/api#inlinekeyboardmarkup"
+                                "url":"https://github.com/B1NT0N"
                                 }
                             ],
                             [
@@ -56,7 +57,6 @@ def send_message(data, msg):
     send_data = {"chat_id":data["message"]["chat"]["id"], 
                 "text":str(msg),
                 "reply_markup":in_keyboard
-     
     }
 
     #print(send_data)
