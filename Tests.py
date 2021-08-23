@@ -15,7 +15,7 @@ def del_updates(data):
     requests.post(f"{config['url']}/getUpdates",{'offset':data["update_id"]+1})
     config['lock'].release()
 
-def send_message(data, msg):
+def send_message_only(data, msg):
     config['lock'].acquire()
 
 
@@ -62,6 +62,68 @@ def send_message(data, msg):
     #print(send_data)
     requests.post(f"{config['url']}/sendMessage",send_data)
     config['lock'].release()
+
+def send_inkeyboard_message(data,msg):
+    config['lock'].acquire()
+
+    in_keyboard={
+        "inline_keyboard":[
+                            [
+                                {"text": " 🎬 Movies",
+                                "callback_data":"m",
+                                "url":"https://github.com/B1NT0N"
+                                }
+                            ],
+                            [
+                                {"text": " 📺 Series",
+                                "callback_data":"s"
+                                }
+                            ]
+                        ],
+    }
+
+    in_keyboard = json.dumps(in_keyboard)
+
+    send_data = {"chat_id":data["message"]["chat"]["id"], 
+                "text":str(msg),
+                "reply_markup":in_keyboard
+    }
+
+    #print(send_data)
+    requests.post(f"{config['url']}/sendMessage",send_data)
+    config['lock'].release()
+    
+def send_keyboard_message(data, msg):
+    config['lock'].acquire()
+
+
+    keyboard = {
+                "keyboard":[
+                            [
+                                {"text": " 🎬 Movies"}
+                            ],
+                            [
+                                {"text": " 📺 Series"}
+                            ],
+                            [
+                                {"text": " 🔙 Back"}
+                            ]
+                        ],
+                'resize_keyboard':True,
+                "one_time_keyboard":True
+                }
+
+    keyboard = json.dumps(keyboard)
+
+    send_data = {"chat_id":data["message"]["chat"]["id"], 
+                "text":str(msg),
+                "reply_markup":keyboard
+    }
+
+    #print(send_data)
+    requests.post(f"{config['url']}/sendMessage",send_data)
+    config['lock'].release()
+  
     
 # "reply_markup":{'keyboard':[[{"text":"1"}],[{"text":"2"}]], 'resize_keyboard':True, "one_time_keyboard":False}
 while True:
@@ -82,7 +144,7 @@ while True:
             Thread(target=del_updates, args=(data,)).start()
             msg=f'{data["message"]["text"]} from:BOT'
             print(f'{data["message"]["text"]} from:{data["message"]["chat"]["username"]}')
-            #Thread(target=send_message, args=(data, msg)).start()
-            send_message(data, msg)
+            #Thread(target=send_message_only, args=(data, msg)).start()
+            send_message_only(data, msg)
         sleep(1)
 
