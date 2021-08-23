@@ -4,7 +4,7 @@ from time import sleep
 from threading import Thread,Lock
 
 
-token = "1854693768:AAEMp18eBDS0zI8FzI1eqsArRYItZvLULnw"
+token = "TOKEN"
 global url
 config={'url':f"https://api.telegram.org/bot{token}",'lock':Lock()}
 
