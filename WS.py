@@ -9,6 +9,7 @@ class Entertainment:
         self.id = id
         self.link = link
         self.watch_link = watch_link
+    
 
 def web_search(my_url,chc):
 
@@ -68,10 +69,12 @@ def web_search(my_url,chc):
             elif chc.upper() == "S":
                 watch_link.append(f"https://embed.warezcdn.net/serie/{id[w_link]}")
             
+        global f_result
         f_result=[]
         for x in range(len(name)):
             for y in range(len(year)):
                 if full_name[x].find(year[y]) != -1:
+                    
                     f_result.append(Entertainment(name[x],year[y],id[x],links[x],watch_link[x]))
                     break
                 elif y == (len(year)-1):
@@ -91,8 +94,12 @@ def web_search(my_url,chc):
     if chc.upper() == "M":
         srh = input("Input Movie name: ").replace(" ","%20").lower()
         my_url = f"https://www.imdb.com/find?q={srh}&s=tt&ttype=ft&ref_=fn_ft"
-        web_search(my_url)
+        web_search(my_url, chc)
+        print(f_result[1].name)
     elif chc.upper() == "S":
         srh = input("Input Serie name: ").replace(" ","%20").lower()
         my_url = f"https://www.imdb.com/find?q={srh}&s=tt&ttype=tv&ref_=fn_tv"
-        web_search(my_url) """
+        web_search(my_url,chc)
+        print(f_result[1].name) """
+
+
